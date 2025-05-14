@@ -1,0 +1,157 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "SchoolDatabaseContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "SchoolManagementCoreApplication",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Degree]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Department]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Ethnicity]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Gender]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StudentDegree]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Students]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StudentTeacher]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Teacher]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GetActiveStudents]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[GetInactiveStudents]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[Allocation]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[DeleteStudent]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[GetStudent]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[GetStudents]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[UpsertStudent]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[EmailExists]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[GetDegreeNamesByStudent]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[GetTeacherNamesByStudent]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidBirthDate]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidDegreeId]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidEmail]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidEthnicityId]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidGenderId]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidPhone]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidStudentId]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsValidTeacherId]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[PhoneExists]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[StudentNameExists]",
+         "ObjectType": 2
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

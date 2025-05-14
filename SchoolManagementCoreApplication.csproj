@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Degrees\Data\" />
+    <Folder Include="Areas\Degrees\Models\" />
+    <Folder Include="Areas\Degrees\Views\" />
+    <Folder Include="Areas\Departments\Data\" />
+    <Folder Include="Areas\Departments\Models\" />
+    <Folder Include="Areas\Departments\Views\" />
+    <Folder Include="Areas\Ethnicities\Data\" />
+    <Folder Include="Areas\Ethnicities\Models\" />
+    <Folder Include="Areas\Ethnicities\Views\" />
+    <Folder Include="Areas\Genders\Data\" />
+    <Folder Include="Areas\Genders\Models\" />
+    <Folder Include="Areas\Genders\Views\" />
+    <Folder Include="Areas\Reports\Data\" />
+    <Folder Include="Areas\Reports\Models\" />
+    <Folder Include="Areas\Reports\Views\" />
+    <Folder Include="Areas\Students\Data\" />
+    <Folder Include="Areas\Students\Models\" />
+    <Folder Include="Areas\Students\Views\Student\" />
+    <Folder Include="Areas\Teachers\Data\" />
+    <Folder Include="Areas\Teachers\Models\" />
+    <Folder Include="Areas\Teachers\Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="efpt.config.json.user" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="NLog.Database" Version="5.4.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.4.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.3.1" />
+  </ItemGroup>
+
+</Project>
