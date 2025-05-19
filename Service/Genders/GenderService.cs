@@ -9,6 +9,7 @@
 ///     <description>Incorporate Counts methods</description>
 /// </modified>
 
+using NLog;
 using SchoolManagementCoreApplication.ModelBOs.Degrees;
 using SchoolManagementCoreApplication.ModelBOs.Genders;
 using SchoolManagementCoreApplication.Models;
@@ -19,6 +20,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
     public class GenderService : IGenderService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public GenderService(SchoolDatabaseContext context)
         {
@@ -34,6 +36,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetGender method called");
                 Gender gender = _context.Genders.Find(id);
                 if (gender == null)
                 {
@@ -49,6 +52,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetGender method");
                 return null;
             }
         }
@@ -62,6 +66,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetGenders method called");
                 List<Gender> genders = _context.Genders.Where(s => s.Active == active).ToList();
                 List<GenderBO> genderBOs = new List<GenderBO>();
                 foreach (Gender gender in genders)
@@ -78,6 +83,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetGenders method");
                 return new List<GenderBO>();
             }
         }
@@ -91,6 +97,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("UpsertGender method called");
                 if (genderBO == null)
                 {
                     return 0;
@@ -124,6 +131,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in UpsertGender method");
                 return 0;
             }
         }
@@ -137,6 +145,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("DeleteGender method called");
                 Gender gender = _context.Genders.Find(id);
                 if (gender == null)
                 {
@@ -148,6 +157,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteGender method");
                 return false;
             }
         }
@@ -161,6 +171,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("ToggleActive method called");
                 Gender gender = _context.Genders.Find(id);
                 if (gender == null)
                 {
@@ -172,6 +183,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ToggleActive method");
                 return false;
             }
         }
@@ -184,6 +196,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetStudentCounts method called");
                 var genders = _context.Genders.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Gender gender in genders)
@@ -199,6 +212,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentCounts method");
                 return null;
             }
         }
@@ -211,6 +225,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetTeacherCounts method called");
                 var genders = _context.Genders.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Gender gender in genders)
@@ -226,6 +241,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherCounts method");
                 return null;
             }
         }
@@ -239,6 +255,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetStudentPercentages method called");
                 var genders = _context.Genders.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -263,6 +280,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentPercentages method");
                 return null;
             }
         }
@@ -276,6 +294,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
         {
             try
             {
+                _logger.Info("GetTeacherPercentages method called");
                 var genders = _context.Genders.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -300,6 +319,7 @@ namespace SchoolManagementCoreApplication.Service.Genders
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherPercentages method");
                 return null;
             }
         }
@@ -311,14 +331,23 @@ namespace SchoolManagementCoreApplication.Service.Genders
         /// <returns>Boolean depicting if its used or not</returns>
         public bool CheckInUse(int id)
         {
-            var timesUsed = _context.Students.Count(s => s.GenderId == id && s.Active == true) +
-                _context.Teachers.Count(s => s.GenderId == id && s.Active == true);
-            if (timesUsed > 0)
+            try
             {
-                return true;
+                _logger.Info("CheckInUse method called");
+                var timesUsed = _context.Students.Count(s => s.GenderId == id && s.Active == true) +
+                    _context.Teachers.Count(s => s.GenderId == id && s.Active == true);
+                if (timesUsed > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.Error(ex, "Error in CheckInUse method");
                 return false;
             }
         }

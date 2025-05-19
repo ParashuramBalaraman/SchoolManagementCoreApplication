@@ -14,12 +14,14 @@ using SchoolManagementCoreApplication.ModelBOs.Student;
 using SchoolManagementCoreApplication.Models;
 using SchoolManagementCoreApplication.Service.StudentDegrees.Interfaces;
 using SchoolManagementCoreApplication.ModelBOs.StudentDegree;
+using NLog;
 
 namespace SchoolManagementCoreApplication.Service.StudentDegrees
 {
     public class StudentDegreeService : IStudentDegreeService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public StudentDegreeService(SchoolDatabaseContext context)
         {
@@ -30,6 +32,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("GetActiveStudentDegrees method called");
                 var studentDegrees = _context.StudentDegrees.ToList();
                 var activeStudentDegrees = new List<StudentDegreeBO>();
                 foreach (var studentDegree in studentDegrees)
@@ -49,6 +52,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetActiveStudentDegrees method");
                 return null;
             }
         }
@@ -62,6 +66,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("GetDegreesByStudent method called");
                 // Gets Student Degrees by Student
                 IEnumerable<StudentDegree> studentDegrees = _context.StudentDegrees.Where(x => x.StudentId == studentId).ToList();
                 List<DegreeBO> degreeBOs = new List<DegreeBO>();
@@ -87,6 +92,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetDegreesByStudent method");
                 return null;
             }
         }
@@ -100,6 +106,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("GetStudentsByDegree method called");
                 // Gets Student Degrees by Degree
                 IEnumerable<StudentDegree> studentDegrees = _context.StudentDegrees.Where(x => x.DegreeId == degreeId).ToList();
                 List<StudentBO> studentBOs = new List<StudentBO>();
@@ -133,6 +140,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentsByDegree method");
                 return null;
             }
         }
@@ -147,10 +155,12 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("ExistingStudentDegree method called");
                 return _context.StudentDegrees.Where(x => x.StudentId == studentId && x.DegreeId == degreeId).Any();
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ExistingStudentDegree method");
                 return false;
             }
         }
@@ -164,6 +174,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("CreateStudentDegree method called");
                 var existingStudentDegree = _context.StudentDegrees.Where(x => x.StudentId == studentId && x.DegreeId == degreeId).FirstOrDefault();
                 // If the student-degree association already exists, do nothing
                 if (existingStudentDegree != null)
@@ -180,6 +191,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in CreateStudentDegree method");
             }
         }
 
@@ -191,6 +203,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("DeleteStudentDegreesByStudent method called");
                 // Get all student degrees for the student
                 IEnumerable<StudentDegree> studentDegrees = _context.StudentDegrees.Where(x => x.StudentId == studentId).ToList();
                 foreach (StudentDegree studentDegree in studentDegrees)
@@ -202,6 +215,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteStudentDegreesByStudent method");
             }
         }
 
@@ -214,6 +228,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
         {
             try
             {
+                _logger.Info("DeleteStudentDegree method called");
                 var studentDegree = _context.StudentDegrees.Where(x => x.StudentId == studentId && x.DegreeId == degreeId).FirstOrDefault();
                 if (studentDegree != null)
                 {
@@ -223,6 +238,7 @@ namespace SchoolManagementCoreApplication.Service.StudentDegrees
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteStudentDegree method");
             }
         }
     }

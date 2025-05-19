@@ -9,6 +9,7 @@
 ///     <description>Incorporate Counts methods</description>
 /// </modified>
 
+using NLog;
 using SchoolManagementCoreApplication.ModelBOs.Ethnicities;
 using SchoolManagementCoreApplication.Models;
 using SchoolManagementCoreApplication.Service.Ethnicities.Interfaces;
@@ -18,6 +19,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
     public class EthnicityService : IEthnicityService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public EthnicityService(SchoolDatabaseContext context)
         {
@@ -34,6 +36,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetEthnicity method called");
                 Ethnicity ethnicity = _context.Ethnicities.Find(id);
                 if (ethnicity == null)
                 {
@@ -49,6 +52,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetEthnicity method");
                 return null;
             }
         }
@@ -62,6 +66,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetEthnicities method called");
                 List<Ethnicity> ethnicities = _context.Ethnicities.Where(s => s.Active == active).ToList();
                 List<EthnicityBO> ethnicityBOs = new List<EthnicityBO>();
                 foreach (Ethnicity ethnicity in ethnicities)
@@ -78,6 +83,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetEthnicities method");
                 return new List<EthnicityBO>();
             }
         }
@@ -91,6 +97,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("UpsertEthnicity method called");
                 if (ethnicityBO == null)
                 {
                     return 0;
@@ -124,6 +131,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in UpsertEthnicity method");
                 return 0;
             }
         }
@@ -137,6 +145,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("DeleteEthnicity method called");
                 Ethnicity ethnicity = _context.Ethnicities.Find(id);
                 if (ethnicity == null)
                 {
@@ -148,6 +157,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteEthnicity method");
                 return false;
             }
         }
@@ -161,6 +171,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("ToggleActive method called");
                 Ethnicity ethnicity = _context.Ethnicities.Find(id);
                 if (ethnicity == null)
                 {
@@ -172,6 +183,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ToggleActive method");
                 return false;
             }
         }
@@ -184,6 +196,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetStudentCounts method called");
                 var ethnicities = _context.Ethnicities.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Ethnicity ethnicity in ethnicities)
@@ -199,6 +212,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentCounts method");
                 return null;
             }
         }
@@ -211,6 +225,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetTeacherCounts method called");
                 var ethnicities = _context.Ethnicities.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Ethnicity ethnicity in ethnicities)
@@ -226,6 +241,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherCounts method");
                 return null;
             }
         }
@@ -239,6 +255,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetStudentPercentages method called");
                 var ethnicities = _context.Ethnicities.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -263,6 +280,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentPercentages method");
                 return null;
             }
         }
@@ -276,6 +294,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         {
             try
             {
+                _logger.Info("GetTeacherPercentages method called");
                 var ethnicities = _context.Ethnicities.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -300,6 +319,7 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherPercentages method");
                 return null;
             }
         }
@@ -311,14 +331,23 @@ namespace SchoolManagementCoreApplication.Service.Ethnicities
         /// <returns>Boolean depicting if its used or not</returns>
         public bool CheckInUse(int id)
         {
-            var timesUsed = _context.Students.Count(s => s.EthnicityId == id && s.Active == true) +
-                _context.Teachers.Count(s => s.EthnicityId == id && s.Active == true);
-            if (timesUsed > 0)
+            try
             {
-                return true;
+                _logger.Info("CheckInUse method called");
+                var timesUsed = _context.Students.Count(s => s.EthnicityId == id && s.Active == true) +
+                    _context.Teachers.Count(s => s.EthnicityId == id && s.Active == true);
+                if (timesUsed > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.Error(ex, "Error in CheckInUse method");
                 return false;
             }
         }

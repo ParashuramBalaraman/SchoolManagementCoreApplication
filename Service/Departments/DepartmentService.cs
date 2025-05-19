@@ -9,6 +9,7 @@
 ///     <description>Incorporate Counts methods</description>
 /// </modified>
 
+using NLog;
 using SchoolManagementCoreApplication.ModelBOs.Departments;
 using SchoolManagementCoreApplication.Models;
 using SchoolManagementCoreApplication.Service.Departments.Interfaces;
@@ -18,6 +19,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
     public class DepartmentService : IDepartmentService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public DepartmentService(SchoolDatabaseContext context)
         {
@@ -33,6 +35,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetDepartment method called");
                 Department department = _context.Departments.Find(id);
                 if (department == null)
                 {
@@ -48,6 +51,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetDepartment method");
                 return null;
             }
         }
@@ -61,6 +65,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetDepartments method called");
                 List<Department> departments = _context.Departments.Where(s => s.Active == active).ToList();
                 List<DepartmentBO> departmentBOs = new List<DepartmentBO>();
                 foreach (Department department in departments)
@@ -77,6 +82,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetDepartments method");
                 return new List<DepartmentBO>();
             }
         }
@@ -90,6 +96,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("UpsertDepartment method called");
                 if (departmentBO == null)
                 {
                     return 0;
@@ -123,6 +130,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in UpsertDepartment method");
                 return 0;
             }
         }
@@ -136,6 +144,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("DeleteDepartment method called");
                 Department department = _context.Departments.Find(id);
                 if (department == null)
                 {
@@ -147,6 +156,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteDepartment method");
                 return false;
             }
         }
@@ -160,6 +170,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("ToggleActive method called");
                 Department department = _context.Departments.Find(id);
                 if (department == null)
                 {
@@ -171,6 +182,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ToggleActive method");
                 return false;
             }
         }
@@ -183,6 +195,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetStudentCounts method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Department department in departments)
@@ -211,6 +224,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentCounts method");
                 return null;
             }
         }
@@ -223,6 +237,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetTeacherCounts method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Department department in departments)
@@ -243,6 +258,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherCounts method");
                 return null;
             }
         }
@@ -255,6 +271,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetDegreeCounts method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var counts = new List<Tuple<string, int>>();
                 foreach (Department department in departments)
@@ -270,6 +287,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetDegreeCounts method");
                 return null;
             }
         }
@@ -284,6 +302,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetStudentPercentages method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -321,6 +340,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentPercentages method");
                 return null;
             }
         }
@@ -334,6 +354,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetTeacherPercentages method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -363,6 +384,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeacherPercentages method");
                 return null;
             }
         }
@@ -376,6 +398,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
         {
             try
             {
+                _logger.Info("GetDegreePercentages method called");
                 var departments = _context.Departments.Where(x => x.Active == true).ToList();
                 var percentages = new List<Tuple<string, float>>();
                 float percentCount = 0;
@@ -400,6 +423,7 @@ namespace SchoolManagementCoreApplication.Service.Departments
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetDegreePercentages method");
                 return null;
             }
         }
@@ -411,13 +435,22 @@ namespace SchoolManagementCoreApplication.Service.Departments
         /// <returns>Boolean depicting if department is in use</returns>
         public bool CheckInUse(int id)
         {
-            var timesUsed = _context.Degrees.Count(s => s.DepartmentId == id && s.Active == true);
-            if (timesUsed > 0)
+            try
             {
-                return true;
+                _logger.Info("CheckInUse method called");
+                var timesUsed = _context.Degrees.Count(s => s.DepartmentId == id && s.Active == true);
+                if (timesUsed > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.Error(ex, "Error in CheckInUse method");
                 return false;
             }
         }
