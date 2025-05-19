@@ -17,12 +17,14 @@ using SchoolManagementCoreApplication.Service.StudentDegrees.Interfaces;
 using SchoolManagementCoreApplication.Service.StudentTeachers.Interfaces;
 using SchoolManagementCoreApplication.Service.Teachers.Interfaces;
 using SchoolManagementCoreApplication.Service.Degrees.Interfaces;
+using NLog;
 
 namespace SchoolManagementCoreApplication.Service.Students
 {
     public class StudentService : IStudentService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private readonly IStudentTeacherService _studentTeacherService;
         private readonly IStudentDegreeService _studentDegreeService;
@@ -48,6 +50,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("GetStudent method called");
                 Student student = _context.Students.Find(id);
                 if (student == null)
                 {
@@ -72,6 +75,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudent method");
                 return null;
             }
         }
@@ -85,6 +89,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("GetStudents method called");
                 List<Student> students = (from s in _context.Students
                                           where s.Active == active
                                           select s).ToList();
@@ -112,6 +117,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudents method");
                 return null;
             }
         }
@@ -125,6 +131,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("UpsertStudent method called");
                 if (studentBO == null)
                 {
                     return 0;
@@ -175,6 +182,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in UpsertStudent method");
                 return 0;
             }
         }
@@ -188,6 +196,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("DeleteStudent method called");
                 Student student = _context.Students.Find(id);
                 if (student == null)
                 {
@@ -199,6 +208,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteStudent method");
                 return false;
             }
         }
@@ -212,6 +222,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("ToggleActive method called");
                 Student student = _context.Students.Find(id);
                 if (student == null)
                 {
@@ -223,6 +234,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ToggleActive method");
                 return false;
             }
         }
@@ -236,6 +248,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("Allocate method called");
                 var teacher = _teacherService.GetTeacher(studentAllocationBO.TeacherId);
                 var degree = _degreeService.GetDegree(studentAllocationBO.DegreeId);
                 if (teacher == null || degree == null)
@@ -259,6 +272,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in Allocate method");
                 return false;
             }
         }
@@ -272,6 +286,7 @@ namespace SchoolManagementCoreApplication.Service.Students
         {
             try
             {
+                _logger.Info("DeleteAllocation method called");
                 bool existingStudentDegree = _studentDegreeService.ExistingStudentDegree(studentAllocationBO.StudentId, studentAllocationBO.DegreeId);
                 bool existingStudentTeacher = _studentTeacherService.ExistingStudentTeacher(studentAllocationBO.StudentId, studentAllocationBO.TeacherId);
                 if (!existingStudentDegree || !existingStudentTeacher)
@@ -284,6 +299,7 @@ namespace SchoolManagementCoreApplication.Service.Students
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteAllocation method");
                 return false;
             }
         }
@@ -296,24 +312,33 @@ namespace SchoolManagementCoreApplication.Service.Students
         /// <returns>StudentAllocatioBO</returns>
         public StudentAllocationBO GetAllocation(int studentId, int DegreeId)
         {
-            var teachers = _context.Teachers.Where(t => t.DegreeId == DegreeId).ToList();
-            var studentTeacher = _context.StudentTeachers.Where(st => st.StudentId == studentId).ToList();
-            foreach (Teacher teacher in teachers)
+            try
             {
-                foreach (StudentTeacher st in studentTeacher)
+                _logger.Info("GetAllocation method called");
+                var teachers = _context.Teachers.Where(t => t.DegreeId == DegreeId).ToList();
+                var studentTeacher = _context.StudentTeachers.Where(st => st.StudentId == studentId).ToList();
+                foreach (Teacher teacher in teachers)
                 {
-                    if (teacher.Id == st.TeacherId)
+                    foreach (StudentTeacher st in studentTeacher)
                     {
-                        return new StudentAllocationBO
+                        if (teacher.Id == st.TeacherId)
                         {
-                            StudentId = studentId,
-                            DegreeId = DegreeId,
-                            TeacherId = teacher.Id
-                        };
+                            return new StudentAllocationBO
+                            {
+                                StudentId = studentId,
+                                DegreeId = DegreeId,
+                                TeacherId = teacher.Id
+                            };
+                        }
                     }
                 }
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in GetAllocation method");
+                return null;
+            }
         }
     }
 }

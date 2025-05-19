@@ -9,6 +9,7 @@
 ///     <description>Incorporate Query Expressions</description>
 /// </modified>
 
+using NLog;
 using SchoolManagementCoreApplication.ModelBOs.Student;
 using SchoolManagementCoreApplication.ModelBOs.Teacher;
 using SchoolManagementCoreApplication.Models;
@@ -19,6 +20,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
     public class StudentTeacherService : IStudentTeacherService
     {
         private readonly SchoolDatabaseContext _context;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public StudentTeacherService(SchoolDatabaseContext context)
         {
@@ -34,6 +36,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("GetTeachersByStudent method called");
                 // Gets Student Teachers by Student
                 IEnumerable<StudentTeacher> studentTeachers = _context.StudentTeachers.Where(x => x.StudentId == studentId).ToList();
                 List<TeacherBO> teacherBOs = new List<TeacherBO>();
@@ -69,6 +72,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetTeachersByStudent method");
                 return null;
             }
         }
@@ -82,6 +86,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("GetStudentsByTeacher method called");
                 // Gets Student Teachers by Teacher
                 IEnumerable<StudentTeacher> studentTeachers = _context.StudentTeachers.Where(x => x.TeacherId == teacherId).ToList();
                 List<StudentBO> studentBOs = new List<StudentBO>();
@@ -115,6 +120,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in GetStudentsByTeacher method");
                 return null;
             }
         }
@@ -129,10 +135,12 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("ExistingStudentTeacher method called");
                 return _context.StudentTeachers.Where(x => x.StudentId == studentId && x.TeacherId == teacherId).Any();
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in ExistingStudentTeacher method");
                 return false;
             }
         }
@@ -146,6 +154,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("CreateStudentTeacher method called");
                 // Check if the student and teacher exist
                 Student student = _context.Students.Where(x => x.Id == studentId).FirstOrDefault();
                 Teacher teacher = _context.Teachers.Where(x => x.Id == teacherId).FirstOrDefault();
@@ -171,6 +180,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in CreateStudentTeacher method");
             }
         }
 
@@ -182,6 +192,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("DeleteStudentTeachersByStudent method called");
                 // Get all student teachers by student
                 IEnumerable<StudentTeacher> studentTeachers = _context.StudentTeachers.Where(x => x.StudentId == studentId).ToList();
                 // Delete each student teacher relationship
@@ -193,6 +204,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteStudentTeachersByStudent method");
             }
         }
 
@@ -205,6 +217,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
         {
             try
             {
+                _logger.Info("DeleteStudentTeacher method called");
                 var studentTeacher = (from s in _context.StudentTeachers
                                       where s.TeacherId == teacherId && s.StudentId == studentId
                                       select s).FirstOrDefault();
@@ -216,6 +229,7 @@ namespace SchoolManagementCoreApplication.Service.StudentTeachers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in DeleteStudentTeacher method");
             }
         }
     }
